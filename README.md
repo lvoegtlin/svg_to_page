@@ -8,7 +8,7 @@ With this tool you can convert svg coordinate files to page xml files
 ```conda env create -f environment.yml```
 
 ### Usage
-Activate the conda environment (```conda activate convert_svg_topage```)
+Activate the conda environment (```conda activate convert_svg_to_page```)
 
 And then you can start the method with the following command
 ```
