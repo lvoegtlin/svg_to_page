@@ -2,6 +2,7 @@ import argparse
 import os
 import sys
 import xml.etree.ElementTree as ET
+from tqdm import tqdm
 
 from utils.XMLhandler import writePAGEfile
 
@@ -20,7 +21,7 @@ def convert(input_path, output_folder):
 
     all_files = filter(lambda x: '.svg' in x, all_files)
 
-    for file in all_files:
+    for file in tqdm(all_files):
         coords_string = parse_file_and_convert(input_path, file)
         file_name, _ = os.path.splitext(file)
         writePAGEfile(os.path.join(output_folder, file_name + '.xml'), coords_string)
@@ -37,8 +38,8 @@ def parse_file_and_convert(input_path, file_name):
     for child in root:
         coordinates = child.attrib['d']
         coor_string = ''
+        prev_number = False
         for elm in coordinates.split():
-            prev_number = False
             if elm.isalpha():
                 coor_string += ' '
             else:
@@ -49,7 +50,7 @@ def parse_file_and_convert(input_path, file_name):
 
                 prev_number = not prev_number
 
-        coordinates_string_list.append(coor_string)
+        coordinates_string_list.append(coor_string.strip())
     return coordinates_string_list
 
 
