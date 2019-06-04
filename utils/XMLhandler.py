@@ -6,7 +6,7 @@ import xml.etree.cElementTree as ET
 import numpy as np
 
 
-def writePAGEfile(output_path, text_lines="", text_region_coords="not provided", baselines=None):
+def writePAGEfile(output_path, text_lines="", type="Text", text_region_coords="not provided", baselines=None):
     # Create root element and add the attributes
     root = ET.Element("PcGts")
     root.set("xmls", "http://schema.primaresearch.org/PAGE/gts/pagecontent/2013-07-15")
@@ -22,8 +22,8 @@ def writePAGEfile(output_path, text_lines="", text_region_coords="not provided",
     page = ET.SubElement(root, "Page")
 
     # Add TextRegion
-    textRegion = ET.SubElement(page, "TextRegion")
-    textRegion.set("id", "region_textline")
+    textRegion = ET.SubElement(page, type + "Region")
+    textRegion.set("id", "region_" + type.lower() + "line")
     textRegion.set("custom", "0")
 
     # Add Coords
@@ -31,17 +31,17 @@ def writePAGEfile(output_path, text_lines="", text_region_coords="not provided",
 
     # Add TextLine
     for i, line in enumerate(text_lines):
-        textLine = ET.SubElement(textRegion, "TextLine", id="textline_{}".format(i), custom="0")
+        textLine = ET.SubElement(textRegion, type + "Line", id=type.lower() + "line_{}".format(i), custom="0")
         ET.SubElement(textLine, "Coords", points=line)
         if baselines:
             ET.SubElement(textLine, "Baseline", points=baselines[i])
         else:
             ET.SubElement(textLine, "Baseline", points="not provided")
-        textEquiv = ET.SubElement(textLine, "TextEquiv")
+        textEquiv = ET.SubElement(textLine, type + "Equiv")
         ET.SubElement(textEquiv, "Unicode")
 
     # Add TextEquiv to textRegion
-    textEquiv = ET.SubElement(textRegion, "TextEquiv")
+    textEquiv = ET.SubElement(textRegion, type + "TextEquiv")
     ET.SubElement(textEquiv, "Unicode")
 
     #print(prettify(root))

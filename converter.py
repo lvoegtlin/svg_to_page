@@ -6,6 +6,18 @@ from tqdm import tqdm
 
 from utils.XMLhandler import writePAGEfile
 
+identifiers = ['c', 't', 'l']
+
+
+def get_type(indentifier):
+    types = {
+        't': "Title",
+        'c': "Conte",
+        'l': "Label",
+        "default": "Text"
+    }
+    return types[indentifier]
+
 
 def convert(input_path, output_folder):
     if not os.path.exists(input_path):
@@ -24,7 +36,14 @@ def convert(input_path, output_folder):
     for file in tqdm(all_files):
         coords_string = parse_file_and_convert(input_path, file)
         file_name, _ = os.path.splitext(file)
-        writePAGEfile(os.path.join(output_folder, file_name + '.xml'), coords_string)
+
+        # guess the typ
+        type = 'default'
+        for identifier in identifiers:
+            if identifier in file_name:
+                type = identifier
+
+        writePAGEfile(os.path.join(output_folder, file_name + '.xml'), coords_string, get_type(type))
 
 
 def parse_file_and_convert(input_path, file_name):
@@ -41,12 +60,14 @@ def parse_file_and_convert(input_path, file_name):
         prev_number = False
         for elm in coordinates.split():
             if elm.isalpha():
-                coor_string += ' '
+                coor_string += ''
             else:
-                if prev_number:
-                    coor_string += str(int(float(elm)))
-                else:
-                    coor_string += str(int(float(elm))) + ','
+                elements = elm.split(',')
+                coor_string += str(int(float(elements[0]))) + ',' + str(int(float(elements[1]))) + ' '
+                # if prev_number:
+                #     coor_string += str(int(float(elm)))
+                # else:
+                #     coor_string += str(int(float(elm))) + ','
 
                 prev_number = not prev_number
 
