@@ -1,5 +1,5 @@
 # Conver SVG to Page XML
-With this tool you can convert svg coordinate files to page xml files
+With this tool you can convert svg coordinate files (example in data folder) to [page xml](https://ieeexplore.ieee.org/document/5597587) files.
 
 ### Requirements
 - conda
