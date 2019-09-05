@@ -12,7 +12,7 @@ identifiers = ['c', 't', 'l']
 def get_type(indentifier):
     types = {
         't': "Title",
-        'c': "Conte",
+        'c': "Cote",
         'l': "Label",
         "default": "Text"
     }
@@ -60,14 +60,16 @@ def parse_file_and_convert(input_path, file_name):
         prev_number = False
         for elm in coordinates.split():
             if elm.isalpha():
-                coor_string += ''
+                coor_string += ' '
             else:
-                elements = elm.split(',')
-                coor_string += str(int(float(elements[0]))) + ',' + str(int(float(elements[1]))) + ' '
-                # if prev_number:
-                #     coor_string += str(int(float(elm)))
-                # else:
-                #     coor_string += str(int(float(elm))) + ','
+                # if we get the coordinates in groups of two
+                # elements = elm.split(',')
+                # coor_string += str(int(float(elements[0]))) + ',' + str(int(float(elements[1]))) + ' '
+
+                if prev_number:
+                    coor_string += str(int(float(elm)))
+                else:
+                    coor_string += str(int(float(elm))) + ','
 
                 prev_number = not prev_number
 
